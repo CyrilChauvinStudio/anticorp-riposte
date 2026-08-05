@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>ANTICORP · Riposte</title>
+
+<!-- PWA / écran d'accueil -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ANTICORP">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" href="./icon-192.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --noir: #0A0A0A; --rouge: #CC0000; --blanc: #F2F0EB;
+    --gris: #7A7773; --gris-fonce: #1A1A1A; --ligne: #2A2A2A;
+  }
+  html, body { background: var(--noir); }
+  body {
+    color: var(--blanc);
+    font-family: 'EB Garamond', Georgia, serif;
+    padding: max(16px, env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
+    max-width: 640px; margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  /* ---- HEADER LOGO ---- */
+  header {
+    border-bottom: 3px solid var(--rouge);
+    padding-bottom: 16px; margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  header img { height: 46px; width: auto; display: block; }
+  .gear {
+    background: none; border: 1px solid var(--ligne); color: var(--gris);
+    width: 40px; height: 40px; border-radius: 0; font-size: 18px; cursor: pointer; flex: none;
+  }
+  .gear:active { border-color: var(--rouge); color: var(--rouge); }
+
+  .label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gris); display: block; margin-bottom: 8px;
+  }
+  .label .num { color: var(--rouge); font-weight: 600; margin-right: 8px; }
+
+  .field { margin-bottom: 20px; }
+  textarea, input {
+    width: 100%; background: var(--gris-fonce); border: 1px solid var(--ligne);
+    color: var(--blanc); font-family: 'EB Garamond', serif; font-size: 17px;
+    padding: 14px; border-radius: 0; resize: vertical;
+  }
+  textarea:focus, input:focus { outline: none; border-color: var(--rouge); }
+  textarea { min-height: 84px; }
+  .post-ctx textarea { min-height: 52px; }
+
+  .dial { display: flex; border: 1px solid var(--ligne); margin-bottom: 22px; }
+  .dial button {
+    flex: 1; background: var(--gris-fonce); color: var(--gris); border: none;
+    padding: 14px 6px; font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+    border-right: 1px solid var(--ligne); transition: all .12s;
+  }
+  .dial button:last-child { border-right: none; }
+  .dial button.on { background: var(--rouge); color: var(--blanc); font-weight: 600; }
+
+  .go {
+    width: 100%; background: var(--rouge); color: var(--blanc); border: none;
+    padding: 18px; font-family: 'Bebas Neue', sans-serif; font-size: 26px;
+    letter-spacing: 2px; cursor: pointer; transition: opacity .12s;
+  }
+  .go:active { opacity: .8; } .go:disabled { opacity: .35; }
+
+  #out { margin-top: 32px; }
+  .riposte {
+    border: 1px solid var(--ligne); border-left: 4px solid var(--rouge);
+    background: var(--gris-fonce); padding: 20px; margin-bottom: 18px;
+    animation: rise .35s ease both;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: none;} }
+  .riposte .angle {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--rouge); margin-bottom: 12px;
+  }
+  .riposte .angle::before { content: "▸ "; }
+  .riposte .texte { font-size: 19px; line-height: 1.5; margin-bottom: 14px; }
+  .riposte .munition {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--gris);
+    border-top: 1px solid var(--ligne); padding-top: 12px; margin-bottom: 14px; line-height: 1.5;
+  }
+  .riposte .munition b { color: var(--blanc); font-weight: 500; }
+  .copy {
+    width: 100%; background: transparent; border: 1px solid var(--rouge); color: var(--rouge);
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; padding: 12px; cursor: pointer; transition: all .12s;
+  }
+  .copy:active { background: var(--rouge); color: var(--blanc); }
+  .copy.done { background: var(--blanc); color: var(--noir); border-color: var(--blanc); }
+
+  .status {
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--gris);
+    text-align: center; padding: 28px; line-height: 1.6;
+  }
+  .status.err { color: var(--rouge); }
+  .blink::after { content: "_"; animation: bk .8s steps(2) infinite; }
+  @keyframes bk { 50% { opacity: 0; } }
+
+  /* ---- MODAL CLÉ API ---- */
+  .modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,.85);
+    display: none; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  .modal.open { display: flex; }
+  .modal .box {
+    background: var(--noir); border: 1px solid var(--rouge); padding: 26px;
+    max-width: 420px; width: 100%;
+  }
+  .modal h2 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .modal p {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--gris);
+    line-height: 1.7; margin-bottom: 18px;
+  }
+  .modal p a { color: var(--rouge); }
+  .modal .go { margin-top: 16px; font-size: 22px; padding: 14px; }
+
+  footer {
+    margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--ligne);
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--gris);
+    letter-spacing: 1px; line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="./anticorp-logo.png" alt="ANTICORP">
+  <button class="gear" id="gear" title="Clé API">⚙</button>
+</header>
+
+<div class="field post-ctx">
+  <label class="label"><span class="num">01</span>Le post / contexte (optionnel)</label>
+  <textarea id="ctx" placeholder="Ex : mon post manifeste ANTICORP…"></textarea>
+</div>
+
+<div class="field">
+  <label class="label"><span class="num">02</span>Le commentaire à traiter</label>
+  <textarea id="commentaire" placeholder="Colle ici le commentaire reçu."></textarea>
+</div>
+
+<label class="label"><span class="num">03</span>Niveau de férocité</label>
+<div class="dial" id="dial">
+  <button data-level="Malin">Malin</button>
+  <button data-level="Percutant" class="on">Percutant</button>
+  <button data-level="Féroce">Féroce</button>
+</div>
+
+<button class="go" id="go">Générer 3 ripostes</button>
+
+<div id="out"></div>
+
+<footer>
+  RÈGLE ANTICORP — TU CHOISIS, TU COPIES, TU POSTES.<br>
+  Aucune connexion automatique à LinkedIn. Ta clé reste sur ce téléphone (cookie).
+</footer>
+
+<!-- MODAL CLÉ API -->
+<div class="modal" id="modal">
+  <div class="box">
+    <h2>Ta clé API Anthropic</h2>
+    <p>
+      Stockée uniquement sur ce téléphone (cookie), jamais envoyée ailleurs.<br>
+      À récupérer sur <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a> → API Keys.
+    </p>
+    <input id="keyInput" type="password" placeholder="sk-ant-…" autocomplete="off">
+    <button class="go" id="saveKey">Enregistrer</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  // ---- CONFIG : si le modèle change un jour, remplace juste cette ligne ----
+  var MODEL = "claude-sonnet-5";
+
+  var STATS = [
+    "Attention humaine moyenne : 8,25 s (Microsoft, 2015).",
+    "Sites B2B avec vidéo : +65 % de conversion (Swell AI, 2025).",
+    "52 % des marketeurs B2B : la vidéo est leur meilleur ROI (Smart Insights, 2024).",
+    "Vidéos <30 s : +200 % de complétion sur LinkedIn.",
+    "93 % des décideurs B2B : la vidéo influence leur décision d'achat (Wyzowl, 2024).",
+    "Contenu drôle : 3 à 5× plus mémorable (encodage élaboratif).",
+    "L'humour active le nucleus accumbens et le circuit dopaminergique (IRM 3 Tesla).",
+    "Le rire abaisse les défenses psychologiques : on est moins sceptique quand on rit."
+  ];
+
+  // ---- cookies ----
+  function setCookie(n,v,days){var d=new Date();d.setTime(d.getTime()+days*864e5);document.cookie=n+"="+encodeURIComponent(v)+";expires="+d.toUTCString()+";path=/;SameSite=Lax";}
+  function getCookie(n){var m=document.cookie.match('(^|;)\\s*'+n+'\\s*=\\s*([^;]+)');return m?decodeURIComponent(m.pop()):"";}
+
+  var modal=document.getElementById('modal');
+  var keyInput=document.getElementById('keyInput');
+  function openModal(){keyInput.value=getCookie('anthropic_key');modal.classList.add('open');keyInput.focus();}
+  function closeModal(){modal.classList.remove('open');}
+  document.getElementById('gear').addEventListener('click',openModal);
+  document.getElementById('saveKey').addEventListener('click',function(){
+    var k=keyInput.value.trim();
+    if(!k){return;}
+    setCookie('anthropic_key',k,365);
+    closeModal();
+  });
+  if(!getCookie('anthropic_key')) openModal();
+
+  // ---- dial ----
+  var dial=document.getElementById('dial'), level='Percutant';
+  dial.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    [].forEach.call(dial.children,function(c){c.classList.remove('on');});
+    b.classList.add('on'); level=b.dataset.level;
+  });
+
+  var out=document.getElementById('out'), go=document.getElementById('go');
+  function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+  function setStatus(m,err){out.innerHTML='<div class="status '+(err?'err':'blink')+'">'+esc(m)+'</div>';}
+
+  function buildPrompt(ctx,comm,lvl){
+    return [
+"Tu es le rédacteur en chef d'ANTICORP, studio de pubs B2B anti-bullshit dans le Sud de la France.",
+"Identité : drôle, percutant, intelligent, impertinent, jamais donneur de leçons. Tu critiques les FORMATS corporate, jamais les personnes. Tu respectes le bon travail même concurrent. B2B UNIQUEMENT.",
+"",
+"Tâche : rédiger 3 réponses à un commentaire LinkedIn reçu sur une publication ANTICORP.",
+"Chaque réponse : (1) très drôle, 'smile in the mind' (on amène au bord de la révélation, le lecteur complète) ; (2) DOCUMENTÉE avec au moins une métrique ci-dessous, glissée naturellement, jamais comme un cours ; (3) courte (1 à 3 phrases, format LinkedIn) ; (4) en français (fr-FR).",
+"Chaque réponse a un ANGLE différent (ex : aïkido = retourner l'objection ; complicité = rire avec ; pas de côté = recadrer par l'absurde).",
+"",
+"Niveau de férocité : "+lvl+".",
+"- Malin : élégant, sourire en coin, zéro agressivité.",
+"- Percutant : mordant maîtrisé, punchline nette.",
+"- Féroce : cash, tranchant, mais sur le format jamais la personne.",
+"",
+"Métriques disponibles :",
+STATS.map(function(s){return "- "+s;}).join("\n"),
+"",
+"CONTEXTE DU POST : "+(ctx||"(non fourni — reste général sur la mission ANTICORP)"),
+"COMMENTAIRE À TRAITER : "+comm,
+"",
+"Réponds UNIQUEMENT avec un tableau JSON valide, sans texte autour ni balises Markdown :",
+'[{"angle":"nom court","riposte":"la réponse à poster","munition":"la métrique utilisée en une ligne"}]'
+    ].join("\n");
+  }
+
+  function render(items){
+    out.innerHTML='';
+    items.forEach(function(it){
+      var c=document.createElement('div'); c.className='riposte';
+      c.innerHTML='<div class="angle">'+esc(it.angle||'Riposte')+'</div>'+
+        '<div class="texte">'+esc(it.riposte||'')+'</div>'+
+        '<div class="munition"><b>Munition —</b> '+esc(it.munition||'')+'</div>'+
+        '<button class="copy">Copier</button>';
+      var b=c.querySelector('.copy');
+      b.addEventListener('click',function(){
+        navigator.clipboard.writeText(it.riposte||'').then(function(){
+          b.textContent='Copié ✓'; b.classList.add('done');
+          setTimeout(function(){b.textContent='Copier';b.classList.remove('done');},1600);
+        });
+      });
+      out.appendChild(c);
+    });
+  }
+
+  go.addEventListener('click',async function(){
+    var key=getCookie('anthropic_key');
+    if(!key){openModal();return;}
+    var comm=document.getElementById('commentaire').value.trim();
+    var ctx=document.getElementById('ctx').value.trim();
+    if(!comm){setStatus("Colle d'abord un commentaire.",true);return;}
+
+    go.disabled=true; setStatus('ANTICORP charge ses munitions');
+    try{
+      var res=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",
+        headers:{
+          "content-type":"application/json",
+          "x-api-key":key,
+          "anthropic-version":"2023-06-01",
+          "anthropic-dangerous-direct-browser-access":"true"
+        },
+        body:JSON.stringify({
+          model:MODEL, max_tokens:1000,
+          messages:[{role:"user",content:buildPrompt(ctx,comm,level)}]
+        })
+      });
+      var data=await res.json();
+      if(data.error){ throw new Error(data.error.message||'API'); }
+      var text=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join("\n");
+      var clean=text.replace(/```json/g,'').replace(/```/g,'').trim();
+      var s=clean.indexOf('['), e=clean.lastIndexOf(']');
+      if(s!==-1&&e!==-1) clean=clean.slice(s,e+1);
+      var items=JSON.parse(clean);
+      if(!Array.isArray(items)||!items.length) throw new Error('réponse vide');
+      render(items);
+    }catch(err){
+      var msg=err.message||'erreur';
+      if(/x-api-key|authentication|401/i.test(msg)) msg='Clé API invalide — touche ⚙ pour la corriger.';
+      setStatus('Raté : '+msg,true);
+    }finally{ go.disabled=false; }
+  });
+})();
+</script>
+</body>
+</html>
