@@ -339,10 +339,35 @@ STATS.map(function(s){return "- "+s;}).join("\n"),
 "CONTEXTE DU POST : "+(ctx||"(non fourni — reste sur la mission ANTICORP)"),
 "COMMENTAIRE À TRAITER : "+comm,
 "",
-"Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour ni balises Markdown :",
-'{"lecture":"en une phrase : qui commente et ce qu\'il veut vraiment","ripostes":[{"angle":"nom court","procede":"procédé + modificateur","riposte":"la réponse à poster","munition":"la munition utilisée, avec sa source"}]}'
+"Rends ta réponse via l'outil « livrer_ripostes » : une lecture en une phrase (qui commente et ce qu'il veut vraiment), puis exactement 3 ripostes."
     ].join("\n");
   }
+
+  // Sortie structurée : l'API renvoie directement un objet propre, plus de JSON à déchiffrer
+  var TOOL = {
+    name: "livrer_ripostes",
+    description: "Livre les 3 ripostes au commentaire LinkedIn.",
+    input_schema: {
+      type: "object",
+      properties: {
+        lecture: { type: "string", description: "En une phrase : qui commente et ce qu'il veut vraiment." },
+        ripostes: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              angle:    { type: "string", description: "Nom court de l'angle." },
+              procede:  { type: "string", description: "Procédé d'humour + modificateur." },
+              riposte:  { type: "string", description: "La réponse à poster telle quelle." },
+              munition: { type: "string", description: "La munition utilisée, avec sa source." }
+            },
+            required: ["angle", "procede", "riposte", "munition"]
+          }
+        }
+      },
+      required: ["lecture", "ripostes"]
+    }
+  };
 
   function render(data){
     out.innerHTML='';
@@ -399,17 +424,30 @@ STATS.map(function(s){return "- "+s;}).join("\n"),
           "anthropic-dangerous-direct-browser-access":"true"
         },
         body:JSON.stringify({
-          model:MODEL, max_tokens:1600, system:SYSTEM,
+          model:MODEL, max_tokens:3000, system:SYSTEM,
+          tools:[TOOL], tool_choice:{type:"tool", name:TOOL.name},
           messages:[{role:"user",content:buildPrompt(ctx,comm,level.v,qui.v)}]
         })
       });
       var data=await res.json();
       if(data.error){ throw new Error(data.error.message||'API'); }
-      var text=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join("\n");
-      render(parse(text));
+      if(data.stop_reason==='max_tokens'){ throw new Error('TROP_LONG'); }
+      var blocks=data.content||[];
+      var tool=blocks.filter(function(b){return b.type==='tool_use';})[0];
+      var result;
+      if(tool && tool.input && Array.isArray(tool.input.ripostes) && tool.input.ripostes.length){
+        result=tool.input;
+      } else {
+        // filet de sécurité : lecture du texte brut
+        var text=blocks.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join("\n");
+        result=parse(text);
+      }
+      render(result);
     }catch(err){
       var msg=err.message||'erreur';
-      if(/x-api-key|authentication|401/i.test(msg)) msg='Clé API invalide — touche ⚙ pour la corriger.';
+      if(msg==='TROP_LONG') msg='Réponse coupée en route. Relance.';
+      else if(/x-api-key|authentication|401/i.test(msg)) msg='Clé API invalide — touche ⚙ pour la corriger.';
+      else if(/overloaded|529/i.test(msg)) msg='Serveurs saturés. Réessaie dans une minute.';
       else if(/model/i.test(msg)) msg='Modèle introuvable ('+MODEL+'). '+msg;
       else if(/JSON|Unexpected/i.test(msg)) msg='Réponse mal formée. Relance, ça arrive aux meilleurs.';
       setStatus('Raté : '+msg,true);
