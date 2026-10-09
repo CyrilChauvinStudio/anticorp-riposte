@@ -6,108 +6,124 @@
 <title>ANTICORP · Riposte</title>
 
 <!-- PWA / écran d'accueil -->
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0A0A0A">
+<link rel="manifest" href="./manifest.json?v=2">
+<meta name="theme-color" content="#0D0E0D">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ANTICORP">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png">
-<link rel="icon" href="./icon-192.png">
+<meta name="apple-mobile-web-app-title" content="Riposte">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=2">
+<link rel="icon" href="./icon-192.png?v=2">
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   :root {
-    --noir: #0A0A0A; --rouge: #CC0000; --blanc: #F2F0EB;
-    --gris: #7A7773; --gris-fonce: #1A1A1A; --ligne: #2A2A2A;
+    /* Charte ANTICORP */
+    --trou-noir: #0D0E0D;
+    --true-blood: #FF4B4B;
+    --ligne-verte: #4BC14E;
+    --grand-bleu: #05A4E7;
+    --yellow: #ECF052;
+    --blanc: #FBFAF7;
+    --gris: #8C8B87;
+    --carte: #171817;
+    --trait: #2A2B2A;
   }
-  html, body { background: var(--noir); }
+  html, body { background: var(--trou-noir); }
   body {
     color: var(--blanc);
-    font-family: 'EB Garamond', Georgia, serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding: max(16px, env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
-    max-width: 640px; margin: 0 auto;
-    min-height: 100vh;
+    max-width: 640px; margin: 0 auto; min-height: 100vh;
   }
+  .disp { font-family: 'Archivo', 'Helvetica Neue', sans-serif; font-stretch: 75%; font-weight: 900; text-transform: uppercase; }
 
-  /* ---- HEADER LOGO ---- */
+  /* ---- HEADER ---- */
   header {
-    border-bottom: 3px solid var(--rouge);
-    padding-bottom: 16px; margin-bottom: 24px;
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding-bottom: 14px; margin-bottom: 22px; border-bottom: 3px solid var(--true-blood);
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
   }
-  header img { height: 46px; width: auto; display: block; }
+  header img { height: 50px; width: auto; display: block; }
+  .titre { font-size: 15px; letter-spacing: 3px; color: var(--gris); margin-top: 6px; }
   .gear {
-    background: none; border: 1px solid var(--ligne); color: var(--gris);
-    width: 40px; height: 40px; border-radius: 0; font-size: 18px; cursor: pointer; flex: none;
+    background: none; border: 1px solid var(--trait); color: var(--gris);
+    width: 40px; height: 40px; font-size: 18px; cursor: pointer; flex: none;
   }
-  .gear:active { border-color: var(--rouge); color: var(--rouge); }
+  .gear:active { border-color: var(--true-blood); color: var(--true-blood); }
 
   .label {
-    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px;
-    text-transform: uppercase; color: var(--gris); display: block; margin-bottom: 8px;
+    font-family: 'Archivo', sans-serif; font-stretch: 100%; font-weight: 700;
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gris); display: block; margin-bottom: 8px;
   }
-  .label .num { color: var(--rouge); font-weight: 600; margin-right: 8px; }
+  .label .num { color: var(--true-blood); margin-right: 8px; }
 
   .field { margin-bottom: 20px; }
   textarea, input {
-    width: 100%; background: var(--gris-fonce); border: 1px solid var(--ligne);
-    color: var(--blanc); font-family: 'EB Garamond', serif; font-size: 17px;
+    width: 100%; background: var(--carte); border: 1px solid var(--trait);
+    color: var(--blanc); font-family: inherit; font-size: 17px; line-height: 1.4;
     padding: 14px; border-radius: 0; resize: vertical;
   }
-  textarea:focus, input:focus { outline: none; border-color: var(--rouge); }
-  textarea { min-height: 84px; }
-  .post-ctx textarea { min-height: 52px; }
+  textarea:focus, input:focus { outline: none; border-color: var(--true-blood); }
+  textarea { min-height: 88px; }
+  .post-ctx textarea { min-height: 56px; }
 
-  .dial { display: flex; border: 1px solid var(--ligne); margin-bottom: 22px; }
+  /* sélecteurs */
+  .dial { display: flex; flex-wrap: wrap; border: 1px solid var(--trait); margin-bottom: 22px; }
   .dial button {
-    flex: 1; background: var(--gris-fonce); color: var(--gris); border: none;
-    padding: 14px 6px; font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    flex: 1 1 auto; background: var(--carte); color: var(--gris); border: none;
+    padding: 13px 8px; font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 12px;
     letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
-    border-right: 1px solid var(--ligne); transition: all .12s;
+    border-right: 1px solid var(--trait); transition: background .12s, color .12s;
   }
   .dial button:last-child { border-right: none; }
-  .dial button.on { background: var(--rouge); color: var(--blanc); font-weight: 600; }
+  .dial button.on { background: var(--true-blood); color: var(--trou-noir); }
+  .dial.qui button.on { background: var(--blanc); color: var(--trou-noir); }
+  @media (max-width: 420px) {
+    .dial.qui button { flex: 1 1 33%; border-bottom: 1px solid var(--trait); }
+  }
 
   .go {
-    width: 100%; background: var(--rouge); color: var(--blanc); border: none;
-    padding: 18px; font-family: 'Bebas Neue', sans-serif; font-size: 26px;
-    letter-spacing: 2px; cursor: pointer; transition: opacity .12s;
+    width: 100%; background: var(--true-blood); color: var(--trou-noir); border: none;
+    padding: 18px; font-family: 'Archivo', sans-serif; font-stretch: 75%; font-weight: 900;
+    font-size: 26px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
   }
-  .go:active { opacity: .8; } .go:disabled { opacity: .35; }
+  .go:active { opacity: .85; } .go:disabled { opacity: .35; }
 
-  #out { margin-top: 32px; }
+  #out { margin-top: 30px; }
+  .lecture {
+    font-size: 14px; line-height: 1.5; color: var(--gris);
+    border: 1px dashed var(--trait); padding: 12px 14px; margin-bottom: 18px;
+  }
+  .lecture b { color: var(--yellow); font-family: 'Archivo', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-right: 6px; }
   .riposte {
-    border: 1px solid var(--ligne); border-left: 4px solid var(--rouge);
-    background: var(--gris-fonce); padding: 20px; margin-bottom: 18px;
+    border: 1px solid var(--trait); border-left: 4px solid var(--true-blood);
+    background: var(--carte); padding: 20px; margin-bottom: 18px;
     animation: rise .35s ease both;
   }
+  .riposte:nth-child(3) { animation-delay: .08s; } .riposte:nth-child(4) { animation-delay: .16s; }
   @keyframes rise { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: none;} }
   .riposte .angle {
-    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px;
-    text-transform: uppercase; color: var(--rouge); margin-bottom: 12px;
+    font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--true-blood); margin-bottom: 4px;
   }
-  .riposte .angle::before { content: "▸ "; }
-  .riposte .texte { font-size: 19px; line-height: 1.5; margin-bottom: 14px; }
+  .riposte .procede { font-size: 12px; color: var(--grand-bleu); margin-bottom: 14px; }
+  .riposte .texte { font-size: 18px; line-height: 1.5; margin-bottom: 14px; white-space: pre-wrap; }
   .riposte .munition {
-    font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--gris);
-    border-top: 1px solid var(--ligne); padding-top: 12px; margin-bottom: 14px; line-height: 1.5;
+    font-size: 13px; color: var(--gris); line-height: 1.5;
+    border-top: 1px solid var(--trait); padding-top: 12px; margin-bottom: 14px;
   }
   .riposte .munition b { color: var(--blanc); font-weight: 500; }
   .copy {
-    width: 100%; background: transparent; border: 1px solid var(--rouge); color: var(--rouge);
-    font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 1px;
+    width: 100%; background: transparent; border: 1px solid var(--true-blood); color: var(--true-blood);
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 1px;
     text-transform: uppercase; padding: 12px; cursor: pointer; transition: all .12s;
   }
-  .copy:active { background: var(--rouge); color: var(--blanc); }
-  .copy.done { background: var(--blanc); color: var(--noir); border-color: var(--blanc); }
+  .copy.done { background: var(--ligne-verte); color: var(--trou-noir); border-color: var(--ligne-verte); }
 
-  .status {
-    font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--gris);
-    text-align: center; padding: 28px; line-height: 1.6;
-  }
-  .status.err { color: var(--rouge); }
+  .status { font-size: 14px; color: var(--gris); text-align: center; padding: 28px; line-height: 1.6; }
+  .status.err { color: var(--true-blood); }
   .blink::after { content: "_"; animation: bk .8s steps(2) infinite; }
   @keyframes bk { 50% { opacity: 0; } }
 
@@ -117,49 +133,54 @@
     display: none; align-items: center; justify-content: center; padding: 20px; z-index: 50;
   }
   .modal.open { display: flex; }
-  .modal .box {
-    background: var(--noir); border: 1px solid var(--rouge); padding: 26px;
-    max-width: 420px; width: 100%;
-  }
-  .modal h2 {
-    font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 1px; margin-bottom: 8px;
-  }
-  .modal p {
-    font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--gris);
-    line-height: 1.7; margin-bottom: 18px;
-  }
-  .modal p a { color: var(--rouge); }
+  .modal .box { background: var(--trou-noir); border: 1px solid var(--true-blood); padding: 26px; max-width: 420px; width: 100%; }
+  .modal h2 { font-size: 30px; margin-bottom: 8px; }
+  .modal p { font-size: 13px; color: var(--gris); line-height: 1.7; margin-bottom: 18px; }
+  .modal p a { color: var(--true-blood); }
   .modal .go { margin-top: 16px; font-size: 22px; padding: 14px; }
 
   footer {
-    margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--ligne);
-    font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--gris);
-    letter-spacing: 1px; line-height: 1.8;
+    margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--trait);
+    font-family: 'Archivo', sans-serif; font-size: 10px; color: var(--gris);
+    letter-spacing: 1px; line-height: 1.8; text-transform: uppercase;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <img src="./anticorp-logo.png" alt="ANTICORP">
+  <div>
+    <img src="./anticorp-logo-rouge.png" alt="ANTICORP — Pubs B2B anti-bullshit">
+    <div class="titre disp">Riposte</div>
+  </div>
   <button class="gear" id="gear" title="Clé API">⚙</button>
 </header>
 
 <div class="field post-ctx">
-  <label class="label"><span class="num">01</span>Le post / contexte (optionnel)</label>
-  <textarea id="ctx" placeholder="Ex : mon post manifeste ANTICORP…"></textarea>
+  <label class="label" for="ctx"><span class="num">01</span>Le post / contexte (optionnel)</label>
+  <textarea id="ctx" placeholder="Ex : J-3 de La Confession, post manifeste, post FAQ…"></textarea>
 </div>
 
 <div class="field">
-  <label class="label"><span class="num">02</span>Le commentaire à traiter</label>
+  <label class="label" for="commentaire"><span class="num">02</span>Le commentaire à traiter</label>
   <textarea id="commentaire" placeholder="Colle ici le commentaire reçu."></textarea>
 </div>
 
-<label class="label"><span class="num">03</span>Niveau de férocité</label>
+<label class="label"><span class="num">03</span>Qui commente ?</label>
+<div class="dial qui" id="qui">
+  <button data-v="Auto" class="on">Auto</button>
+  <button data-v="Prospect">Prospect</button>
+  <button data-v="Confrère">Confrère</button>
+  <button data-v="Sceptique">Sceptique</button>
+  <button data-v="Allié">Allié</button>
+  <button data-v="Troll">Troll</button>
+</div>
+
+<label class="label"><span class="num">04</span>Niveau de férocité</label>
 <div class="dial" id="dial">
-  <button data-level="Malin">Malin</button>
-  <button data-level="Percutant" class="on">Percutant</button>
-  <button data-level="Féroce">Féroce</button>
+  <button data-v="Malin">Malin</button>
+  <button data-v="Percutant" class="on">Percutant</button>
+  <button data-v="Féroce">Féroce</button>
 </div>
 
 <button class="go" id="go">Générer 3 ripostes</button>
@@ -167,16 +188,17 @@
 <div id="out"></div>
 
 <footer>
-  RÈGLE ANTICORP — TU CHOISIS, TU COPIES, TU POSTES.<br>
-  Aucune connexion automatique à LinkedIn. Ta clé reste sur ce téléphone (cookie).
+  Règle ANTICORP — tu choisis, tu copies, tu postes.<br>
+  On critique les formats, jamais les gens.<br>
+  Aucune connexion à LinkedIn. Ta clé reste sur ce téléphone.
 </footer>
 
 <!-- MODAL CLÉ API -->
 <div class="modal" id="modal">
   <div class="box">
-    <h2>Ta clé API Anthropic</h2>
+    <h2 class="disp">Ta clé API Anthropic</h2>
     <p>
-      Stockée uniquement sur ce téléphone (cookie), jamais envoyée ailleurs.<br>
+      Stockée uniquement sur ce téléphone (cookie), jamais envoyée ailleurs qu'à Anthropic.<br>
       À récupérer sur <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a> → API Keys.
     </p>
     <input id="keyInput" type="password" placeholder="sk-ant-…" autocomplete="off">
@@ -187,18 +209,73 @@
 <script>
 (function () {
   // ---- CONFIG : si le modèle change un jour, remplace juste cette ligne ----
-  var MODEL = "claude-sonnet-5";
+  var MODEL = "claude-sonnet-5-5";
 
+  // ---- Munitions : chiffres affichés sur anticorp.fr + données B2B validées ----
   var STATS = [
-    "Attention humaine moyenne : 8,25 s (Microsoft, 2015).",
-    "Sites B2B avec vidéo : +65 % de conversion (Swell AI, 2025).",
-    "52 % des marketeurs B2B : la vidéo est leur meilleur ROI (Smart Insights, 2024).",
-    "Vidéos <30 s : +200 % de complétion sur LinkedIn.",
-    "93 % des décideurs B2B : la vidéo influence leur décision d'achat (Wyzowl, 2024).",
-    "Contenu drôle : 3 à 5× plus mémorable (encodage élaboratif).",
-    "L'humour active le nucleus accumbens et le circuit dopaminergique (IRM 3 Tesla).",
-    "Le rire abaisse les défenses psychologiques : on est moins sceptique quand on rit."
+    "Contenu drôle : 3 à 5 fois plus mémorisé qu'un contenu neutre (encodage élaboratif).",
+    "90 % des gens se souviennent mieux d'une pub qui les a fait rire (Oracle Happiness Report).",
+    "72 % choisiraient la marque qui les a fait sourire plutôt qu'un concurrent qui ne l'a pas fait (Oracle Happiness Report).",
+    "69 % ouvriraient un e-mail dont l'objet est drôle (Oracle Happiness Report).",
+    "95 % des dirigeants admettent ne pas oser l'humour, par peur de rater leur cible (Oracle Happiness Report).",
+    "Plus de 70 % des acheteurs B2B jugent l'humour efficace en pub, mais seuls 36 % en voient dans leur secteur (Journal of Business Research).",
+    "Une pub B2B drôle : +28 % de connexion à la marque, +20 % chez les décideurs (Magna Media Trials / LinkedIn).",
+    "93 % des décideurs B2B disent que la vidéo influence leur décision d'achat (Wyzowl).",
+    "Attention moyenne : 8,25 secondes avant décrochage (Microsoft).",
+    "Formats de moins de 30 s : jusqu'à +200 % de complétion sur LinkedIn.",
+    "Le rire active le nucleus accumbens, cœur du circuit dopaminergique de la récompense (IRM 3 Tesla).",
+    "Le rire abaisse les défenses : on est biochimiquement moins sceptique quand on rit.",
+    "Environ 4 000 messages publicitaires croisés par jour : l'ennui est invisible."
   ];
+
+  var SYSTEM = [
+"Tu es la plume d'ANTICORP sur LinkedIn. Tu rédiges des réponses aux commentaires reçus sous les publications ANTICORP (postées depuis le profil de son fondateur).",
+"",
+"## QUI EST ANTICORP",
+"- ANTICORP est un STUDIO de pubs B2B. Jamais « agence », jamais « anti-agence ».",
+"- Baseline : « Pubs B2B anti-bullshit ». Accroche du site : studio de pubs B2B précises, drôles, et regardées en entier.",
+"- ANTICORP ne fait PAS de vidéos. Une vidéo corporate informe ; une pub agit (elle attrape, marque, imprime, met en mouvement). Pour ses productions, dis toujours « pub » ou « film », jamais « vidéo ». Le mot « vidéo » sert uniquement à désigner ce qu'ANTICORP dénonce (la vidéo corporate informative).",
+"- L'arme, c'est l'humour. Et ce n'est pas un pari : c'est de la biochimie. L'humour ouvre la porte, il ne remplace pas l'argument. Le prospect est d'abord un humain.",
+"- Films de 15 secondes à 2 minutes. Une idée et une seule par film.",
+"- Pour qui : PME et ETI B2B qui osent. Pas pour tout le monde, et c'est très bien comme ça. ANTICORP ne prend pas les briefs « format classique » ou « la même chose en mieux » ; d'autres artisans font très bien ces formats.",
+"- Basé dans le Sud de la France, se déplace partout.",
+"",
+"## LA MÉTHODE (si on te pose la question, respecte-la à la lettre)",
+"- On creuse : le secteur, ses codes, ses clichés, ses évidences, les concurrents, et ce qui rend l'entreprise singulière. Résultat : une idée par film.",
+"- On fabrique : plusieurs pistes de scripts, puis écriture, casting, vrais acteurs, vrais tournages, techniques hybrides IA pour n'importe quel lieu ou époque, VFX, montage, déclinaisons de formats.",
+"- On arme : où, quand, comment le film sera vu. Prescription de diffusion, formats, plans de diffusion, mesure sur les objectifs du client (notoriété, vues qualifiées, complétion, leads). Pas de film qui ne sera pas diffusé.",
+"- Deux phases : Build (stratégie + pistes de scripts) puis Run (on produit, on réalise, on prescrit la diffusion, on mesure). On peut s'arrêter après le Build, avant d'avoir payé un seul jour de tournage. Le Build se déduit du Run.",
+"- Tarifs : ne les donne QUE si le commentaire demande explicitement le prix. Alors : Build à partir de 5 000 €, campagne complète à partir de 25 000 €, Build déduit du Run.",
+"",
+"## RÉPONSES DE FOND AUX OBJECTIONS (à reformuler, jamais à réciter)",
+"- « L'humour, c'est risqué / on va se ridiculiser » → Le ridicule vient d'un humour qui ne connaît pas son sujet. On ne fait rien sans comprendre le marché, l'audience et les lignes rouges.",
+"- « Nos clients ne rient pas / notre secteur est sérieux » → On ne rit jamais DE quelqu'un, on rit d'une absurdité partagée. L'humour d'une pub ANTICORP est celui des prospects du client. Le brief et l'écriture servent à vérifier le tir avant le tournage.",
+"- « On a toujours été sérieux » → Il suffit d'oser dire ce que tout le monde pense dans le métier ; ANTICORP s'occupe de la formulation. Personne n'a besoin de devenir comédien.",
+"- « Une fois drôle, toujours drôle ? » → Non. L'humour est un outil ; ce qui compte, c'est la cohérence du regard.",
+"- « On fait déjà des interviews, du contenu » → Le contenu entretient la présence ; la pub marque un territoire et crée une préférence chez ceux qui ne vous connaissent pas. Il faut probablement les deux.",
+"- « Montrez vos réalisations » → Les premières pubs ANTICORP sont celles d'ANTICORP (la série ANTI-HÉROS : neuf victimes, aucun survivant). Les réalisations clients arrivent.",
+"- « Notre dernière vidéo est ratée » → ANTICORP ne commente pas la vidéo des autres.",
+"",
+"## TON",
+"- Impertinent, drôle, très écrit. Intelligent, incisif, jamais clown, jamais gênant. WTF dans la puissance, précis dans la forme.",
+"- Humour anglais : deadpan, understatement, absurde cohérent. Le « smile in the mind » : tu amènes le lecteur au bord de la révélation, c'est lui qui complète.",
+"- On critique les FORMATS corporate (plan drone du siège, poignée de main, « l'humain au cœur de nos métiers », musique d'ascenseur, graphiques qui montent, collaborateurs qui rient faux, jargon creux), jamais les personnes, jamais les clients, jamais un concurrent nommé. On respecte le bon travail.",
+"- ANTICORP est une alternative, pas LA solution. « Nous proposons une approche différente », jamais « nous révolutionnons le secteur » ni « 99 % des vidéos corporate sont nulles ».",
+"- On ne vend pas, on se fait acheter. Confiance calme. Aucun forcing, aucun « n'hésitez pas », aucun « offre », aucun « DM-moi », aucun superlatif automatique. Le contact (tropbien@anticorp.fr) seulement si quelqu'un le demande clairement.",
+"- Running gag maison : le public fidèle des vidéos corporate (le Dirigeant, la Responsable Com, l'alternante… et la mère de l'alternante quand elle a du réseau).",
+"",
+"## INTERDITS ABSOLUS",
+"- Aucune date calendaire, aucune année dans la réponse à poster.",
+"- Ne jamais parler de « trilogie créative », ni de listes de styles de cinéastes, ni d'un « style signature » : chaque client a son propre style.",
+"- Ne pas mettre en avant la rareté (nombre de productions par an). Si on te le demande directement : « une dizaine de campagnes par an, plafond révisable en cas de succès — encore faut-il l'atteindre ».",
+"- Ne jamais citer le nom du fondateur : on parle au nom d'ANTICORP.",
+"- Jamais d'attaque personnelle, même face à un troll. On retourne le format, pas la personne.",
+"- Pas d'émoji, pas de hashtag.",
+"",
+"## LES PROCÉDÉS D'HUMOUR (chaque riposte en utilise un, nommé)",
+"Exagération absurde · Décalage situationnel · Répétition obsessionnelle · Inversion des codes · Comique gestuel (décrit) · Anachronisme volontaire · Métaphore poussée (prendre le jargon au pied de la lettre) · Quiproquo organisé · Hyperbole corporatiste · Détournement d'usage · Détournement de film connu · Personnification de concept · Focus absurde des conséquences · Drame maximal pour un détail minuscule · Pragmatisme vs situation fantasmée · Compliment dévastateur (attaquer le bullshit avec la langue du bullshit, politesse irréprochable).",
+"Modificateurs : Deadpan, Understatement, Absurde cohérent."
+  ].join("\n");
 
   // ---- cookies ----
   function setCookie(n,v,days){var d=new Date();d.setTime(d.getTime()+days*864e5);document.cookie=n+"="+encodeURIComponent(v)+";expires="+d.toUTCString()+";path=/;SameSite=Lax";}
@@ -209,58 +286,76 @@
   function openModal(){keyInput.value=getCookie('anthropic_key');modal.classList.add('open');keyInput.focus();}
   function closeModal(){modal.classList.remove('open');}
   document.getElementById('gear').addEventListener('click',openModal);
+  modal.addEventListener('click',function(e){ if(e.target===modal && getCookie('anthropic_key')) closeModal(); });
   document.getElementById('saveKey').addEventListener('click',function(){
-    var k=keyInput.value.trim();
-    if(!k){return;}
-    setCookie('anthropic_key',k,365);
-    closeModal();
+    var k=keyInput.value.trim(); if(!k) return;
+    setCookie('anthropic_key',k,365); closeModal();
   });
   if(!getCookie('anthropic_key')) openModal();
 
-  // ---- dial ----
-  var dial=document.getElementById('dial'), level='Percutant';
-  dial.addEventListener('click',function(e){
-    var b=e.target.closest('button'); if(!b) return;
-    [].forEach.call(dial.children,function(c){c.classList.remove('on');});
-    b.classList.add('on'); level=b.dataset.level;
-  });
+  // ---- sélecteurs ----
+  function selector(id, initial){
+    var el=document.getElementById(id), state={v:initial};
+    el.addEventListener('click',function(e){
+      var b=e.target.closest('button'); if(!b) return;
+      [].forEach.call(el.children,function(c){c.classList.remove('on');});
+      b.classList.add('on'); state.v=b.dataset.v;
+    });
+    return state;
+  }
+  var level=selector('dial','Percutant');
+  var qui=selector('qui','Auto');
 
   var out=document.getElementById('out'), go=document.getElementById('go');
-  function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+  function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
   function setStatus(m,err){out.innerHTML='<div class="status '+(err?'err':'blink')+'">'+esc(m)+'</div>';}
 
-  function buildPrompt(ctx,comm,lvl){
+  function buildPrompt(ctx,comm,lvl,who){
     return [
-"Tu es le rédacteur en chef d'ANTICORP, studio de pubs B2B anti-bullshit dans le Sud de la France.",
-"Identité : drôle, percutant, intelligent, impertinent, jamais donneur de leçons. Tu critiques les FORMATS corporate, jamais les personnes. Tu respectes le bon travail même concurrent. B2B UNIQUEMENT.",
+"Rédige 3 réponses au commentaire LinkedIn ci-dessous.",
 "",
-"Tâche : rédiger 3 réponses à un commentaire LinkedIn reçu sur une publication ANTICORP.",
-"Chaque réponse : (1) très drôle, 'smile in the mind' (on amène au bord de la révélation, le lecteur complète) ; (2) DOCUMENTÉE avec au moins une métrique ci-dessous, glissée naturellement, jamais comme un cours ; (3) courte (1 à 3 phrases, format LinkedIn) ; (4) en français (fr-FR).",
-"Chaque réponse a un ANGLE différent (ex : aïkido = retourner l'objection ; complicité = rire avec ; pas de côté = recadrer par l'absurde).",
+"QUI COMMENTE : "+(who==='Auto'?"à toi de le déduire (prospect, confrère, sceptique, allié ou troll).":who+"."),
+"- Prospect qui pose une vraie question : au moins une des 3 réponses répond franchement et utilement (toujours en deadpan, sans vendre).",
+"- Confrère (réalisateur, agence, vidéaste) : respect du métier, on rit ensemble du format, jamais de lui.",
+"- Sceptique : aïkido, on retourne l'objection avec une preuve.",
+"- Allié : complicité, on prolonge sa blague sans le flatter.",
+"- Troll : élégance totale, on ne mord pas l'homme, on ridiculise le format qu'il défend. Ou on l'enterre sous la politesse.",
 "",
-"Niveau de férocité : "+lvl+".",
+"NIVEAU DE FÉROCITÉ : "+lvl+".",
 "- Malin : élégant, sourire en coin, zéro agressivité.",
 "- Percutant : mordant maîtrisé, punchline nette.",
-"- Féroce : cash, tranchant, mais sur le format jamais la personne.",
+"- Féroce : cash, tranchant, WTF assumé, mais sur le format, jamais la personne.",
 "",
-"Métriques disponibles :",
+"CHAQUE RÉPONSE :",
+"1. Très drôle, procédé d'humour identifié, smile in the mind.",
+"2. Documentée par au moins une munition ci-dessous, glissée naturellement (jamais comme un cours). Dans la réponse à poster, cite la source sans l'année.",
+"3. Courte : 1 à 3 phrases, format commentaire LinkedIn.",
+"4. Un ANGLE différent pour chacune (ex : aïkido, complicité, pas de côté par l'absurde, réponse franche).",
+"5. En français (fr-FR), tutoiement ou vouvoiement calé sur le commentaire.",
+"",
+"MUNITIONS DISPONIBLES :",
 STATS.map(function(s){return "- "+s;}).join("\n"),
 "",
-"CONTEXTE DU POST : "+(ctx||"(non fourni — reste général sur la mission ANTICORP)"),
+"CONTEXTE DU POST : "+(ctx||"(non fourni — reste sur la mission ANTICORP)"),
 "COMMENTAIRE À TRAITER : "+comm,
 "",
-"Réponds UNIQUEMENT avec un tableau JSON valide, sans texte autour ni balises Markdown :",
-'[{"angle":"nom court","riposte":"la réponse à poster","munition":"la métrique utilisée en une ligne"}]'
+"Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour ni balises Markdown :",
+'{"lecture":"en une phrase : qui commente et ce qu\'il veut vraiment","ripostes":[{"angle":"nom court","procede":"procédé + modificateur","riposte":"la réponse à poster","munition":"la munition utilisée, avec sa source"}]}'
     ].join("\n");
   }
 
-  function render(items){
+  function render(data){
     out.innerHTML='';
-    items.forEach(function(it){
+    if(data.lecture){
+      var l=document.createElement('div'); l.className='lecture';
+      l.innerHTML='<b>Lecture</b>'+esc(data.lecture); out.appendChild(l);
+    }
+    (data.ripostes||[]).forEach(function(it){
       var c=document.createElement('div'); c.className='riposte';
       c.innerHTML='<div class="angle">'+esc(it.angle||'Riposte')+'</div>'+
-        '<div class="texte">'+esc(it.riposte||'')+'</div>'+
-        '<div class="munition"><b>Munition —</b> '+esc(it.munition||'')+'</div>'+
+        (it.procede?'<div class="procede">'+esc(it.procede)+'</div>':'')+
+        '<div class="texte">'+esc(it.riposte)+'</div>'+
+        (it.munition?'<div class="munition"><b>Munition —</b> '+esc(it.munition)+'</div>':'')+
         '<button class="copy">Copier</button>';
       var b=c.querySelector('.copy');
       b.addEventListener('click',function(){
@@ -273,12 +368,25 @@ STATS.map(function(s){return "- "+s;}).join("\n"),
     });
   }
 
+  function parse(text){
+    var clean=text.replace(/```json/g,'').replace(/```/g,'').trim();
+    var s=clean.indexOf('{'), e=clean.lastIndexOf('}');
+    if(s!==-1&&e!==-1){
+      var obj=JSON.parse(clean.slice(s,e+1));
+      if(Array.isArray(obj.ripostes)&&obj.ripostes.length) return obj;
+    }
+    // filet de sécurité : ancien format tableau
+    var a=clean.indexOf('['), z=clean.lastIndexOf(']');
+    var arr=JSON.parse(clean.slice(a,z+1));
+    return {ripostes:arr};
+  }
+
   go.addEventListener('click',async function(){
     var key=getCookie('anthropic_key');
     if(!key){openModal();return;}
     var comm=document.getElementById('commentaire').value.trim();
     var ctx=document.getElementById('ctx').value.trim();
-    if(!comm){setStatus("Colle d'abord un commentaire.",true);return;}
+    if(!comm){setStatus("Colle d'abord un commentaire. Même un « bravo », on en fera quelque chose.",true);return;}
 
     go.disabled=true; setStatus('ANTICORP charge ses munitions');
     try{
@@ -291,22 +399,19 @@ STATS.map(function(s){return "- "+s;}).join("\n"),
           "anthropic-dangerous-direct-browser-access":"true"
         },
         body:JSON.stringify({
-          model:MODEL, max_tokens:1000,
-          messages:[{role:"user",content:buildPrompt(ctx,comm,level)}]
+          model:MODEL, max_tokens:1600, system:SYSTEM,
+          messages:[{role:"user",content:buildPrompt(ctx,comm,level.v,qui.v)}]
         })
       });
       var data=await res.json();
       if(data.error){ throw new Error(data.error.message||'API'); }
       var text=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join("\n");
-      var clean=text.replace(/```json/g,'').replace(/```/g,'').trim();
-      var s=clean.indexOf('['), e=clean.lastIndexOf(']');
-      if(s!==-1&&e!==-1) clean=clean.slice(s,e+1);
-      var items=JSON.parse(clean);
-      if(!Array.isArray(items)||!items.length) throw new Error('réponse vide');
-      render(items);
+      render(parse(text));
     }catch(err){
       var msg=err.message||'erreur';
       if(/x-api-key|authentication|401/i.test(msg)) msg='Clé API invalide — touche ⚙ pour la corriger.';
+      else if(/model/i.test(msg)) msg='Modèle introuvable ('+MODEL+'). '+msg;
+      else if(/JSON|Unexpected/i.test(msg)) msg='Réponse mal formée. Relance, ça arrive aux meilleurs.';
       setStatus('Raté : '+msg,true);
     }finally{ go.disabled=false; }
   });
