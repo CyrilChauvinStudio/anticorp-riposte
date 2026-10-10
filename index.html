@@ -339,7 +339,7 @@ STATS.map(function(s){return "- "+s;}).join("\n"),
 "CONTEXTE DU POST : "+(ctx||"(non fourni — reste sur la mission ANTICORP)"),
 "COMMENTAIRE À TRAITER : "+comm,
 "",
-"Rends ta réponse via l'outil « livrer_ripostes » : une lecture en une phrase (qui commente et ce qu'il veut vraiment), puis exactement 3 ripostes."
+"OBLIGATOIRE : rends ta réponse uniquement en appelant l'outil « livrer_ripostes », sans aucun texte avant ni après : une lecture en une phrase (qui commente et ce qu'il veut vraiment), puis exactement 3 ripostes."
     ].join("\n");
   }
 
@@ -425,7 +425,7 @@ STATS.map(function(s){return "- "+s;}).join("\n"),
         },
         body:JSON.stringify({
           model:MODEL, max_tokens:3000, system:SYSTEM,
-          tools:[TOOL], tool_choice:{type:"tool", name:TOOL.name},
+          tools:[TOOL], tool_choice:{type:"auto"},
           messages:[{role:"user",content:buildPrompt(ctx,comm,level.v,qui.v)}]
         })
       });
@@ -440,7 +440,11 @@ STATS.map(function(s){return "- "+s;}).join("\n"),
       } else {
         // filet de sécurité : lecture du texte brut
         var text=blocks.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join("\n");
-        result=parse(text);
+        try { result=parse(text); }
+        catch(e){
+          if(!text.trim()) throw e;
+          result={ripostes:[{angle:'Riposte (format libre)',procede:'',riposte:text.trim(),munition:''}]};
+        }
       }
       render(result);
     }catch(err){
@@ -448,7 +452,7 @@ STATS.map(function(s){return "- "+s;}).join("\n"),
       if(msg==='TROP_LONG') msg='Réponse coupée en route. Relance.';
       else if(/x-api-key|authentication|401/i.test(msg)) msg='Clé API invalide — touche ⚙ pour la corriger.';
       else if(/overloaded|529/i.test(msg)) msg='Serveurs saturés. Réessaie dans une minute.';
-      else if(/model/i.test(msg)) msg='Modèle introuvable ('+MODEL+'). '+msg;
+      else if(/not_found|model:|does not exist/i.test(msg)) msg='Modèle introuvable ('+MODEL+'). '+msg;
       else if(/JSON|Unexpected/i.test(msg)) msg='Réponse mal formée. Relance, ça arrive aux meilleurs.';
       setStatus('Raté : '+msg,true);
     }finally{ go.disabled=false; }
